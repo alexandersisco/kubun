@@ -1,13 +1,22 @@
 package main
 
-import "fmt"
-import "bufio"
-import "io"
-import "os"
-import "strings"
+import (
+	"bufio"
+	"flag"
+	"fmt"
+	"io"
+	"os"
+
+	"github.com/alexandersisco/pathy/segments"
+)
 
 func main() {
-	path := "~/workspace/goproj/pathy/main.go"
+	var path string
+
+	var slicePat string
+	flag.StringVar(&slicePat, "slice", "[::]", "a pattern for taking slices from the path")
+
+	flag.Parse()
 
 	fi, err := os.Stdin.Stat()
 	if err != nil {
@@ -25,33 +34,8 @@ func main() {
 		path, _ = ReadStdIn()
 	}
 
-	// ListPathSegments(path)
-
-	dir_path := DirPath(path)
-	fmt.Println(dir_path)
-}
-
-func DirPath(path string) string {
-	segments := strings.Split(path, "/")
-
-	length := len(segments)
-
-	str := ""
-	for i, v := range segments {
-		if i < length-1 {
-			str += v + "/"
-		}
-	}
-
-	return str[0 : len(str)-1]
-}
-
-func ListPathSegments(path string) {
-	segments := strings.Split(path, "/")
-
-	for i, v := range segments {
-		fmt.Println(i, v)
-	}
+	newPath := segments.Slice(path, slicePat)
+	println(newPath)
 }
 
 func ReadStdIn() (string, error) {
