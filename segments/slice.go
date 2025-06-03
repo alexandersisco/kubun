@@ -12,30 +12,68 @@ func Slice(s string, pat string) string {
 	if pat == "[]" {
 		return ""
 	}
-	start, stop := ParseSlicePattern(s, pat)
 	segments := strings.Split(s, "/")
+	start, stop, step := ParseSlicePattern(len(segments), pat)
 	sliced := segments[start:stop]
+
+	if step < 0 {
+		ReverseSegments(sliced)
+	}
 	s = strings.Join(sliced, "/")
 	return s
 }
 
-func ParseSlicePattern(s string, pattern string) (int, int) {
+func ReverseSegments(segments []string) {
+	for i, j := 0, len(segments)-1; i < j; i, j = i+1, j-1 {
+		segments[i], segments[j] = segments[j], segments[i]
+	}
+}
+
+func ParseSlicePattern(segmentCount int, pattern string) (int, int, int) {
 	pattern = pattern[1 : len(pattern)-1]
-	segments := strings.Split(s, "/")
 
 	parts := strings.Split(pattern, ":")
 	if len(parts) < 2 {
-		return 0, len(segments)
+		return 0, segmentCount, 1
 	}
 
+	// Start
 	start, err := strconv.Atoi(parts[0])
 	if err != nil {
 		start = 0
 	}
 
-	stop, err := strconv.Atoi(parts[1])
-	if err != nil {
-		stop = len(segments)
+	// Negative indexing for start
+	if start < 0 {
+		start = max(segmentCount+start, 0)
 	}
-	return start, stop
+
+	if start > segmentCount {
+		start = segmentCount
+	}
+
+	// Stop
+	stop, err := strconv.Atoi(parts[1])
+	if err != nil || stop > segmentCount {
+		stop = segmentCount
+	}
+
+	// Negative indexing for stop
+	if stop < 0 {
+		stop = segmentCount + stop + 1
+		if stop < 0 {
+			stop = segmentCount
+		}
+	}
+
+	// Step
+	if len(parts) < 3 {
+		return start, stop, 1
+	}
+	step, err := strconv.Atoi(parts[2])
+	if err != nil {
+		step = 1
+	}
+
+	return start, stop, step
 }
