@@ -7,7 +7,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/alexandersisco/pathy/segments"
+	"github.com/alexandersisco/kubun/segments"
 )
 
 func main() {
