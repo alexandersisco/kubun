@@ -10,14 +10,25 @@ import (
 	"github.com/alexandersisco/kubun/segments"
 )
 
+func Usage() {
+	fmt.Fprintf(os.Stderr, "Usage of kubun:\n")
+	fmt.Fprintf(os.Stderr, "\tkubun -s '[:-2]' # Select all segments, excluding the last (behavior is like dirname)\n")
+	fmt.Fprintf(os.Stderr, "\tkubun -s '[-1:]' # Select the last segment (behavior is like basename)\n")
+	fmt.Fprintf(os.Stderr, "\tkubun -d ',' -s '[1:]' # Select all segments divided by ',', skipping the first one\n")
+	fmt.Fprintf(os.Stderr, "Flags:\n")
+	flag.PrintDefaults()
+}
+
 func main() {
 	var path string
 
+	flag.Usage = Usage
+
 	var slicePat string
-	flag.StringVar(&slicePat, "slice", "[::]", "a pattern for taking slices from the path")
+	flag.StringVar(&slicePat, "s", "[::]", "select segments from the string based on the slice pattern: [start:stop:step]")
 
 	var delimiter string = "/"
-	flag.StringVar(&delimiter, "delimiter", "/", "character or string that divides the segments")
+	flag.StringVar(&delimiter, "d", "/", "the delimiter that divides the string into segments")
 
 	flag.Parse()
 
