@@ -5,21 +5,22 @@ import (
 	"strings"
 )
 
-func Slice(s string, pat string) string {
+func Slice(s string, pat string, delimiter string) string {
 	if pat == "" || pat == "[:]" || pat == "[::]" || pat == "[0:]" || pat == "[0::]" {
 		return s
 	}
 	if pat == "[]" {
 		return ""
 	}
-	segments := strings.Split(s, "/")
+	s = strings.Trim(s, "\n\r ")
+	segments := strings.Split(s, delimiter)
 	start, stop, step := ParseSlicePattern(len(segments), pat)
 	sliced := segments[start:stop]
 
 	if step < 0 {
 		ReverseSegments(sliced)
 	}
-	s = strings.Join(sliced, "/")
+	s = strings.Join(sliced, delimiter)
 	return s
 }
 

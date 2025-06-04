@@ -6,11 +6,12 @@ import (
 )
 
 func TestPatEmptyStr(t *testing.T) {
+	delimiter := "/"
 	pattern := ""
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	want := regexp.MustCompile(`\b` + expected + `\b`)
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -19,11 +20,12 @@ func TestPatEmptyStr(t *testing.T) {
 }
 
 func TestPatEmptyBrackets(t *testing.T) {
+	delimiter := "/"
 	pattern := "[]"
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := ""
 	want := regexp.MustCompile(`` + expected + ``)
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -32,11 +34,12 @@ func TestPatEmptyBrackets(t *testing.T) {
 }
 
 func TestPatOneSemicolon(t *testing.T) {
+	delimiter := "/"
 	pattern := "[:]"
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	want := regexp.MustCompile(`` + expected + ``)
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -45,11 +48,12 @@ func TestPatOneSemicolon(t *testing.T) {
 }
 
 func TestPatTwoSemicolons(t *testing.T) {
+	delimiter := "/"
 	pattern := "[::]"
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	want := regexp.MustCompile(`` + expected + ``)
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -58,11 +62,12 @@ func TestPatTwoSemicolons(t *testing.T) {
 }
 
 func TestPatStartZeroStopBlank(t *testing.T) {
+	delimiter := "/"
 	pattern := "[0:]"
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	want := regexp.MustCompile(`` + expected + ``)
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -71,11 +76,12 @@ func TestPatStartZeroStopBlank(t *testing.T) {
 }
 
 func TestPatStartZeroStopBlankStepBlank(t *testing.T) {
+	delimiter := "/"
 	pattern := "[0::]"
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	want := regexp.MustCompile(`` + expected + ``)
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -84,11 +90,12 @@ func TestPatStartZeroStopBlankStepBlank(t *testing.T) {
 }
 
 func TestStartSecond(t *testing.T) {
+	delimiter := "/"
 	pattern := "[1:]"
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := "the/beginning/God/created/the/heavens/and/the/earth"
 	want := regexp.MustCompile(`` + expected + ``)
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -97,11 +104,12 @@ func TestStartSecond(t *testing.T) {
 }
 
 func TestStartThird(t *testing.T) {
+	delimiter := "/"
 	pattern := "[2:]"
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := "beginning/God/created/the/heavens/and/the/earth"
 	want := regexp.MustCompile(`` + expected + ``)
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -110,11 +118,12 @@ func TestStartThird(t *testing.T) {
 }
 
 func TestStartFourth(t *testing.T) {
+	delimiter := "/"
 	pattern := "[3:]"
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := "God/created/the/heavens/and/the/earth"
 	want := regexp.MustCompile(`` + expected + ``)
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -123,10 +132,11 @@ func TestStartFourth(t *testing.T) {
 }
 
 func TestStartOutOfRange(t *testing.T) {
+	delimiter := "/"
 	pattern := "[100:]"
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := ""
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -135,11 +145,12 @@ func TestStartOutOfRange(t *testing.T) {
 }
 
 func TestStopOutOfRange(t *testing.T) {
+	delimiter := "/"
 	pattern := "[0:100]"
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	want := regexp.MustCompile(`` + expected + ``)
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -148,11 +159,12 @@ func TestStopOutOfRange(t *testing.T) {
 }
 
 func TestNegativeStartLast(t *testing.T) {
+	delimiter := "/"
 	pattern := "[-1:]"
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := "earth"
 	want := regexp.MustCompile(`` + expected + ``)
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -161,11 +173,12 @@ func TestNegativeStartLast(t *testing.T) {
 }
 
 func TestNegativeStartSecondToLast(t *testing.T) {
+	delimiter := "/"
 	pattern := "[-2:]"
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := "the/earth"
 	want := regexp.MustCompile(`` + expected + ``)
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -174,10 +187,11 @@ func TestNegativeStartSecondToLast(t *testing.T) {
 }
 
 func TestNegativeStartOutOfRange(t *testing.T) {
+	delimiter := "/"
 	pattern := "[-100:]"
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := "In/the/beginning/God/created/the/heavens/and/the/earth"
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -186,10 +200,11 @@ func TestNegativeStartOutOfRange(t *testing.T) {
 }
 
 func TestNegativeStopAtSecondToLast(t *testing.T) {
+	delimiter := "/"
 	pattern := "[:-2]"
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := "In/the/beginning/God/created/the/heavens/and/the"
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -198,10 +213,11 @@ func TestNegativeStopAtSecondToLast(t *testing.T) {
 }
 
 func TestNegativeStopOutOfRange(t *testing.T) {
+	delimiter := "/"
 	pattern := "[:-100]"
 	input := "In/the/beginning/God/created/the/heavens/and/the/earth"
 	expected := "In/the/beginning/God/created/the/heavens/and/the/earth"
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)
@@ -211,10 +227,11 @@ func TestNegativeStopOutOfRange(t *testing.T) {
 
 // Negative Step (Reverse Segments)
 func TestNegativeStep(t *testing.T) {
+	delimiter := "/"
 	pattern := "[::-1]"
 	input := "In/the/beginning"
 	expected := "beginning/the/In"
-	output := Slice(input, pattern)
+	output := Slice(input, pattern, delimiter)
 	if expected != output {
 		t.Errorf("Expected: %s\n", expected)
 		t.Errorf("Actual: %s\n\n", output)

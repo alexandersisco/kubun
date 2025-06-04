@@ -16,6 +16,9 @@ func main() {
 	var slicePat string
 	flag.StringVar(&slicePat, "slice", "[::]", "a pattern for taking slices from the path")
 
+	var delimiter string = "/"
+	flag.StringVar(&delimiter, "delimiter", "/", "character or string that divides the segments")
+
 	flag.Parse()
 
 	fi, err := os.Stdin.Stat()
@@ -34,7 +37,7 @@ func main() {
 		path, _ = ReadStdIn()
 	}
 
-	newPath := segments.Slice(path, slicePat)
+	newPath := segments.Slice(path, slicePat, delimiter)
 	println(newPath)
 }
 
