@@ -6,6 +6,7 @@ import (
 )
 
 func Slice(s string, pat string, delimiter string) string {
+	s = strings.TrimRight(s, "\r\n")
 	if pat == "" || pat == "[:]" || pat == "[::]" || pat == "[0:]" || pat == "[0::]" {
 		return s
 	}
