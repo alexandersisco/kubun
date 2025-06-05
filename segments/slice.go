@@ -14,14 +14,23 @@ func Slice(s string, pat string, delimiter string) string {
 		return ""
 	}
 	s = strings.Trim(s, "\n\r ")
+
+	d := ExtractDelimiters(pat)
+	if d.delimiter != "" {
+		delimiter = d.delimiter
+	}
 	segments := strings.Split(s, delimiter)
-	start, stop, step := ParseSlicePattern(len(segments), pat)
+	start, stop, step := ParseSlicePattern(len(segments), d.slicePattern)
 	sliced := segments[start:stop]
 
 	if step < 0 {
 		ReverseSegments(sliced)
 	}
-	s = strings.Join(sliced, delimiter)
+	joinDelimiter := delimiter
+	if d.shouldReplaceDelimiter {
+		joinDelimiter = d.newDelimiter
+	}
+	s = strings.Join(sliced, joinDelimiter)
 	return s
 }
 

@@ -49,7 +49,7 @@ func main() {
 	}
 
 	newPath := segments.Slice(path, slicePat, delimiter)
-	println(newPath)
+	fmt.Fprint(os.Stdout, newPath)
 }
 
 func ReadStdIn() (string, error) {
