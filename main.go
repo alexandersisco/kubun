@@ -2,35 +2,33 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
+	"github.com/alexflint/go-arg"
 	"io"
 	"os"
-
-	"github.com/alexandersisco/kubun/segments"
 )
 
 func Usage() {
 	fmt.Fprintf(os.Stderr, "Usage of kubun:\n")
-	fmt.Fprintf(os.Stderr, "\tkubun -s '[:-2]' # Select all segments, excluding the last (behavior is like dirname)\n")
-	fmt.Fprintf(os.Stderr, "\tkubun -s '[-1:]' # Select the last segment (behavior is like basename)\n")
-	fmt.Fprintf(os.Stderr, "\tkubun -d ',' -s '[1:]' # Select all segments divided by ',', skipping the first one\n")
+	fmt.Fprintf(os.Stderr, "\tkubun '[:-2]' # Select all fields, excluding the last (behavior is like dirname)\n")
+	fmt.Fprintf(os.Stderr, "\tkubun '[-1:]' # Select the last field (behavior is like basename)\n")
+	fmt.Fprintf(os.Stderr, "\tkubun ',[:]\n' # Select all fields delimited by commas and change the delimiters to newlines\n")
 	fmt.Fprintf(os.Stderr, "Flags:\n")
-	flag.PrintDefaults()
 }
 
 func main() {
 	var path string
 
-	flag.Usage = Usage
+	var args struct {
+		SlicePat       string `arg:"positional,required" help:"Use Python inspired slice syntax: [start:stop:step]"`
+		Input          string `arg:"positional" help:"Input string to select from"`
+		ExcludeNewline bool   `arg:"-n,--exclude-newline" help:"Do not output trailing newline"`
+	}
 
-	var slicePat string
-	flag.StringVar(&slicePat, "s", "[::]", "select segments from the string based on the slice pattern: [start:stop:step]")
+	arg.MustParse(&args)
 
-	var delimiter string = "/"
-	flag.StringVar(&delimiter, "d", "/", "the delimiter that divides the string into segments")
-
-	flag.Parse()
+	var slicePat string = args.SlicePat
+	var excludeTrailingNewline bool = args.ExcludeNewline
 
 	fi, err := os.Stdin.Stat()
 	if err != nil {
@@ -48,8 +46,16 @@ func main() {
 		path, _ = ReadStdIn()
 	}
 
-	newPath := segments.Slice(path, slicePat, delimiter)
-	fmt.Fprint(os.Stdout, newPath)
+	if len(args.Input) > 0 {
+		path = args.Input
+	}
+
+	newPath := Slice(path, slicePat, "/")
+	outputFormat := "%s\n"
+	if excludeTrailingNewline {
+		outputFormat = "%s"
+	}
+	fmt.Fprintf(os.Stdout, outputFormat, newPath)
 }
 
 func ReadStdIn() (string, error) {
