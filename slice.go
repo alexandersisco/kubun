@@ -40,7 +40,7 @@ func ReverseSegments(segments []string) {
 	}
 }
 
-func ParseSlicePattern(segmentCount int, pattern string) (int, int, int) {
+func ParseSlicePattern(segmentCount int, pattern string) (start, stop, step int) {
 	pattern = pattern[1 : len(pattern)-1]
 
 	parts := strings.Split(pattern, ":")
@@ -64,24 +64,29 @@ func ParseSlicePattern(segmentCount int, pattern string) (int, int, int) {
 	}
 
 	// Stop
-	stop, err := strconv.Atoi(parts[1])
+	stop, err = strconv.Atoi(parts[1])
 	if err != nil || stop > segmentCount {
 		stop = segmentCount
 	}
 
 	// Negative indexing for stop
 	if stop < 0 {
-		stop = segmentCount + stop + 1
+		stop = segmentCount + stop
 		if stop < 0 {
 			stop = segmentCount
 		}
+	}
+
+	// Ensure start is not greater than stop
+	if start > stop {
+		start = stop
 	}
 
 	// Step
 	if len(parts) < 3 {
 		return start, stop, 1
 	}
-	step, err := strconv.Atoi(parts[2])
+	step, err = strconv.Atoi(parts[2])
 	if err != nil {
 		step = 1
 	}

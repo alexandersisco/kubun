@@ -93,25 +93,25 @@ func Test(t *testing.T) {
 			"the/earth",
 		},
 		{
-			"Negative start out of range",
+			"Select everything but the last segment with [:-1] (like dirname command)",
 			"/",
-			"[-100:]",
-			"In/the/beginning/God/created/the/heavens/and/the/earth",
-			"In/the/beginning/God/created/the/heavens/and/the/earth",
-		},
-		{
-			"Negative start out of range",
-			"/",
-			"[-100:]",
-			"In/the/beginning/God/created/the/heavens/and/the/earth",
-			"In/the/beginning/God/created/the/heavens/and/the/earth",
-		},
-		{
-			"Select everything but the last segment with [:-2] (like dirname command)",
-			"/",
-			"[:-2]",
+			"[:-1]",
 			"In/the/beginning/God/created/the/heavens/and/the/earth",
 			"In/the/beginning/God/created/the/heavens/and/the",
+		},
+		{
+			"Negative start out of range",
+			"/",
+			"[-100:]",
+			"In/the/beginning/God/created/the/heavens/and/the/earth",
+			"In/the/beginning/God/created/the/heavens/and/the/earth",
+		},
+		{
+			"Negative start out of range",
+			"/",
+			"[-100:]",
+			"In/the/beginning/God/created/the/heavens/and/the/earth",
+			"In/the/beginning/God/created/the/heavens/and/the/earth",
 		},
 		{
 			"Negative stop out of range",
@@ -126,6 +126,13 @@ func Test(t *testing.T) {
 			"[::-1]",
 			"the/heavens/and/the/earth",
 			"earth/the/and/heavens/the",
+		},
+		{
+			"Positive start index is greater than positive stop index",
+			"/",
+			"[2:1]",
+			"In/the/beginning/God/created/the/heavens/and/the/earth",
+			"",
 		},
 	}
 
