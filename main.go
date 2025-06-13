@@ -8,23 +8,40 @@ import (
 	"os"
 )
 
-func Usage() {
-	fmt.Fprintf(os.Stderr, "Usage of kubun:\n")
-	fmt.Fprintf(os.Stderr, "\tkubun '[:-2]' # Select all fields, excluding the last (behavior is like dirname)\n")
-	fmt.Fprintf(os.Stderr, "\tkubun '[-1:]' # Select the last field (behavior is like basename)\n")
-	fmt.Fprintf(os.Stderr, "\tkubun ',[:]\n' # Select all fields delimited by commas and change the delimiters to newlines\n")
-	fmt.Fprintf(os.Stderr, "Flags:\n")
+type args struct {
+	SlicePat       string `arg:"positional,required" help:"Use Python inspired slice syntax: [start:stop:step]"`
+	Input          string `arg:"positional" help:"Input string to select from"`
+	ExcludeNewline bool   `arg:"-n,--exclude-newline" help:"Do not output trailing newline"`
+}
+
+func (args) Description() string {
+	return `
+Python-style slicing on the command line for delimiter separated text
+
+Examples:
+  kubun '[:]' /usr/bin/sort               -> /usr/bin/sort
+  kubun '[-1:]' /usr/bin/sort             -> sort
+  kubun '[-2:]' /usr/bin/sort             -> bin/sort
+
+  Replacing delimiters:
+  kubun '/[:]\'                           -> \usr\bin\sort
+  kubun '/[1:], '                         -> usr, bin, sort
+  kubun '/[1:]\n'                         -> usr
+                                             bin
+                                             sort
+
+  Reverse fields:
+  kubun '[::-1]' /usr/bin/sort            -> sort/bin/usr/
+
+  Stdin:
+  echo "/usr/bin/sort" | kubun '[-3:]'    -> usr/bin/sort
+`
 }
 
 func main() {
 	var path string
 
-	var args struct {
-		SlicePat       string `arg:"positional,required" help:"Use Python inspired slice syntax: [start:stop:step]"`
-		Input          string `arg:"positional" help:"Input string to select from"`
-		ExcludeNewline bool   `arg:"-n,--exclude-newline" help:"Do not output trailing newline"`
-	}
-
+	var args args
 	arg.MustParse(&args)
 
 	var slicePat string = args.SlicePat
