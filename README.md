@@ -4,6 +4,11 @@ A CLI for slicing delimiter-separated text — Python-style
 
 Kubun draws inspiration from Python's slice syntax: `[start:stop:step]`. It is meant to be a more intuitive solution for slicing fields and segments of delimiter-separated text on the command line than tools like `cut`, `awk`, `sed`, et al.
 
+## Install
+```
+go install github.com/alexandersisco/kubun@latest
+```
+
 ## Usage
 Kubun takes up to two positional arguments: the SLICE pattern followed by the optional INPUT. 
 
