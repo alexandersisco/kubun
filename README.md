@@ -1,6 +1,6 @@
 # Kubun  くぶん 
 
-A CLI for slicing delimiter-separated text
+A CLI for slicing and indexing delimiter-separated text
 
 Kubun draws inspiration from the way that Python makes it easy to slice and dice lists. It is meant to be a more intuitive solution for slicing fields and segments of text on the command line than tools like `cut`, `awk`, `sed`, et al.
 
@@ -22,11 +22,13 @@ Here are some basic examples:
   kubun '[:-1]' /usr/bin/sort             -> /usr/bin
   kubun '[-1:]' /usr/bin/sort             -> sort
   kubun '[-2:]' /usr/bin/sort             -> bin/sort
-
+```
+Select a single field by placing the field's index between the brackets. Here are some examples:
+```
+  kubun '[0]' /usr/bin/sort               -> // Blank since there is nothing before the first delimiter
   kubun '[1]' /usr/bin/sort               -> usr
   kubun '[-1]' /usr/bin/sort              -> sort
 ```
-
 You can also pipe text into Kubun:
 ```
   echo "/usr/bin/sort" | kubun '[-3:]'    -> usr/bin/sort
@@ -40,7 +42,6 @@ By default, Kubun looks for the "/" forward slash delimiter. To slice based on a
 ```
   kubun ':[0:2]' $PATH                      -> /bin:/usr/bin
 ```
-
 Kubun makes it easy to replace delimiters.
 
 To replace the delimiters in a string of text, include the old and new delimiters on either side of the slice pattern like so: `'<old>[:]<new>'`.
