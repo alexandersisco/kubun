@@ -38,7 +38,7 @@ Kubun supports reversing fields by passing in a negative step. However, Python-s
 ### Delimiters
 By default, Kubun looks for the "/" forward slash delimiter. To slice based on a different delimiter, place the delimiter that you want to use immediately before the slice pattern as in the following example:
 ```
-  
+  kubun ':[0:2]' $PATH                      -> /bin:/usr/bin
 ```
 
 Kubun makes it easy to replace delimiters.
