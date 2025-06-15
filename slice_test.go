@@ -134,6 +134,41 @@ func Test(t *testing.T) {
 			"In/the/beginning/God/created/the/heavens/and/the/earth",
 			"",
 		},
+		{
+			"Select the first segment",
+			"/",
+			"[0]",
+			"In/the/beginning/God/created/the/heavens/and/the/earth",
+			"In",
+		},
+		{
+			"Select the fifth segment",
+			"/",
+			"[4]",
+			"In/the/beginning/God/created/the/heavens/and/the/earth",
+			"created",
+		},
+		{
+			"Select the second to last segment",
+			"/",
+			"[-2]",
+			"In/the/beginning/God/created/the/heavens/and/the/earth",
+			"the",
+		},
+		{
+			"Index out of range",
+			"/",
+			"[100]",
+			"In/the/beginning",
+			"beginning",
+		},
+		{
+			"Negative index out of range",
+			"/",
+			"[-100]",
+			"In/the/beginning",
+			"In",
+		},
 	}
 
 	passCount := 0

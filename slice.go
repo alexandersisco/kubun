@@ -19,8 +19,33 @@ func Slice(s string, pat string, delimiter string) string {
 	if d.delimiter != "" {
 		delimiter = d.delimiter
 	}
+
+	// Split string into segments
 	segments := strings.Split(s, delimiter)
-	start, stop, step := ParseSlicePattern(len(segments), d.slicePattern)
+
+	// Remove [ brackets ] from slice pattern
+	pattern := d.slicePattern[1 : len(d.slicePattern)-1]
+
+	// Check if the pattern simply contains an index
+	if !strings.Contains(pattern, ":") {
+		idx, err := strconv.Atoi(pattern)
+		if err != nil {
+			return ""
+		}
+
+		// Clamp the index if it is out of range
+		segmentCount := len(segments)
+		if idx < 0 {
+			idx = max(segmentCount+idx, 0)
+		}
+		if idx >= segmentCount {
+			idx = segmentCount - 1
+		}
+		return segments[idx]
+	}
+
+	// Parse the slice pattern
+	start, stop, step := ParseSlicePattern(len(segments), pattern)
 	sliced := segments[start:stop]
 
 	if step < 0 {
@@ -41,12 +66,7 @@ func ReverseSegments(segments []string) {
 }
 
 func ParseSlicePattern(segmentCount int, pattern string) (start, stop, step int) {
-	pattern = pattern[1 : len(pattern)-1]
-
 	parts := strings.Split(pattern, ":")
-	if len(parts) < 2 {
-		return 0, segmentCount, 1
-	}
 
 	// Start
 	start, err := strconv.Atoi(parts[0])
