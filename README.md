@@ -22,7 +22,11 @@ Here are some basic examples:
   kubun '[:-1]' /usr/bin/sort             -> /usr/bin
   kubun '[-1:]' /usr/bin/sort             -> sort
   kubun '[-2:]' /usr/bin/sort             -> bin/sort
+
+  kubun '[1]' /usr/bin/sort               -> usr
+  kubun '[-1]' /usr/bin/sort              -> sort
 ```
+
 You can also pipe text into Kubun:
 ```
   echo "/usr/bin/sort" | kubun '[-3:]'    -> usr/bin/sort
@@ -31,15 +35,21 @@ Kubun supports reversing fields by passing in a negative step. However, Python-s
 ```
   kubun '[::-1]' /usr/bin/sort            -> sort/bin/usr/
 ```
-### Replacing delimiters
+### Delimiters
+By default, Kubun looks for the "/" forward slash delimiter. To slice based on a different delimiter, place the delimiter that you want to use immediately before the slice pattern as in the following example:
+```
+  
+```
+
 Kubun makes it easy to replace delimiters.
 
 To replace the delimiters in a string of text, include the old and new delimiters on either side of the slice pattern like so: `'<old>[:]<new>'`.
 ```
-  kubun '/[:]\'                           -> \usr\bin\sort
-  kubun '/[1:], '                         -> usr, bin, sort
-  kubun '/[1:]\n'                         -> usr
-                                             bin
-                                             sort
+  kubun '/[:]\' /usr/bin/sort             -> \usr\bin\sort
+  kubun '/[1:], ' /usr/bin/sort           -> usr, bin, sort
+  kubun ':[:]\n' $PATH                    -> /bin
+                                             /usr/local/bin
+                                             /usr/bin
+                                             ...
 ```
 
