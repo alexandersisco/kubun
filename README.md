@@ -18,39 +18,39 @@ The syntax for Kubun's slice pattern follows that of Python which includes the f
 
 Here are some basic examples:
 ```bash
-kubun '[:]' /usr/bin/sort               -> /usr/bin/sort
-kubun '[:-1]' /usr/bin/sort             -> /usr/bin
-kubun '[-1:]' /usr/bin/sort             -> sort
-kubun '[-2:]' /usr/bin/sort             -> bin/sort
+kubun '[:]' /usr/bin/sort             # -> /usr/bin/sort
+kubun '[:-1]' /usr/bin/sort           # -> /usr/bin
+kubun '[-1:]' /usr/bin/sort           # -> sort
+kubun '[-2:]' /usr/bin/sort           # -> bin/sort
 ```
 Select a single field by placing the field's index between the brackets. Here are some examples:
 ```bash
-kubun '[0]' /usr/bin/sort               -> // Blank since there is nothing before the first delimiter
-kubun '[1]' /usr/bin/sort               -> usr
-kubun '[-1]' /usr/bin/sort              -> sort
+kubun '[0]' /usr/bin/sort             # -> '' (Blank since there is nothing before the first delimiter)
+kubun '[1]' /usr/bin/sort             # -> usr
+kubun '[-1]' /usr/bin/sort            # -> sort
 ```
 You can also pipe text into Kubun:
 ```bash
-echo "/usr/bin/sort" | kubun '[-3:]'    -> usr/bin/sort
+echo "/usr/bin/sort" | kubun '[-3:]'  # -> usr/bin/sort
 ```
 Kubun supports reversing fields by passing in a negative step. However, Python-style behavior for step values greater than |1| is not yet implemented.
 ```bash
-kubun '[::-1]' /usr/bin/sort            -> sort/bin/usr/
+kubun '[::-1]' /usr/bin/sort          # -> sort/bin/usr/
 ```
 ### Delimiters
 By default, Kubun looks for the "/" forward slash delimiter. To slice based on a different delimiter, place the delimiter that you want to use immediately before the slice pattern as in the following example:
 ```bash
-kubun ':[0:2]' $PATH                    -> /bin:/usr/bin
+kubun ':[0:2]' $PATH                  # -> /bin:/usr/bin
 ```
 Kubun makes it easy to replace delimiters.
 
 To replace the delimiters in a string of text, include the old and new delimiters on either side of the slice pattern like so: `'<old>[:]<new>'`.
 ```bash
-kubun '/[:]\' /usr/bin/sort             -> \usr\bin\sort
-kubun '/[1:], ' /usr/bin/sort           -> usr, bin, sort
-kubun ':[:]\n' $PATH                    -> /bin
-                                           /usr/local/bin
-                                           /usr/bin
-                                           ...
+kubun '/[:]\' /usr/bin/sort           # -> \usr\bin\sort
+kubun '/[1:], ' /usr/bin/sort         # -> usr, bin, sort
+kubun ':[:]\n' $PATH                  # -> /bin
+                                      #    /usr/local/bin
+                                      #    /usr/bin
+                                      #    ...
 ```
 
